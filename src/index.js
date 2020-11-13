@@ -1,0 +1,10 @@
+const Koa = require('koa')
+const chalk  = require('chalk')
+const bodyParser = require('koa-bodyparser')
+const app = new Koa()
+const routing = require('./routes')
+app.use(bodyParser())
+routing(app)
+app.listen('5288', () => {
+  console.log(chalk.green('Server is running at port: http://localhost:5288'))
+})
