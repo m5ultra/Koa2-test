@@ -5,7 +5,9 @@ route.post('/', user.create)
 
 route.get('/', user.find)
 
-route.patch('/', user.update)
+route.get('/:id', user.findById)
 
-route.delete('/', user.delete)
+route.patch('/:id', user.update)
+
+route.delete('/:id', user.delete)
 module.exports = route
