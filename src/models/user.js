@@ -4,7 +4,7 @@ const { Schema, model } = mongoose
 const userSchema = new Schema({
   __v: { type: String, select: false },
   name: { type: String, required: true },
-  age: { type: Number, required: false }
+  password: { type: Number, required: true, selected: false }
 })
 
 module.exports = model('User', userSchema)

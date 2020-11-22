@@ -1,6 +1,9 @@
 class HomeCtl {
   index(ctx) {
-    ctx.body = '<h1>这里是主页</h1>'
+    ctx.body = {
+      title: 'koa2 json',
+      cookie: ctx.cookies.get('mycookie')
+    }
   }
 }
 

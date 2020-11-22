@@ -5,8 +5,13 @@ const error = require('koa-json-error')
 const parameter = require('koa-parameter')
 // 通过mongoose 链接数据库
 const mongoose = require('mongoose')
-const { uri } = require('./config')
-mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true }, () => {
+const {
+  uri
+} = require('./config')
+mongoose.connect(uri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+}, () => {
   console.log('Atlas connect success!')
 })
 const db = mongoose.connection
@@ -15,21 +20,27 @@ db.once('open', function () {
   console.log('we\'re connected!')
 })
 
-function formatError(err) {
-  return {
-    status: err.status,
-    msg: err.message,
-    success: false
-  }
-}
+// function formatError(err) {
+//   return {
+//     status: err.status,
+//     msg: err.message,
+//     success: false
+//   }
+// }
 
 const app = new Koa()
 const routing = require('./routes')
 app.use(bodyParser())
 app.use(parameter(app))
 app.use(error({
-  format: formatError,
-  postFormat: (e, { stack, ...rest }) => process.env.NODE_ENV === 'production' ? rest : { stack, ...rest }
+  // format: formatError,
+  postFormat: (e, {
+    stack,
+    ...rest
+  }) => process.env.NODE_ENV === 'production' ? rest : {
+    stack,
+    ...rest
+  }
 }))
 routing(app)
 app.listen('5288', () => {
