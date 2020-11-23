@@ -8,12 +8,14 @@ class UserCtl {
   async find(ctx) {
     ctx.body = await User.find()
   }
+
   async checkOwner(ctx, next) {
     if (ctx.state.user._id !== ctx.params.id) {
       ctx.throw(403, '权限不足！')
     }
     await next()
   }
+
   async findById(ctx) {
     const user = await User.findById(ctx.params.id)
     if (!user) {
@@ -56,7 +58,7 @@ class UserCtl {
         required: true
       },
     })
-    const user = await User.findByIdAndUpdate(ctx.params.id, ctx.request.body, {new: true})
+    const user = await User.findByIdAndUpdate(ctx.params.id, ctx.request.body, { new: true })
     if (!user) {
       ctx.throw(404, '要更新用户不存在')
     }
