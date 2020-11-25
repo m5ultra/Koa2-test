@@ -57,14 +57,31 @@ class UserCtl {
         type: 'string',
         required: false
       },
-      avatar_url: { type: 'string', required: false },
-      gender: { type: 'string', required: false },
-      headline: { type: 'string', required: false },
-      locations: { type: 'array', itemType: 'string', required: false },
-      business: { type: 'string', required: false },
+      avatar_url: {
+        type: 'string',
+        required: false
+      },
+      gender: {
+        type: 'string',
+        required: false
+      },
+      headline: {
+        type: 'string',
+        required: false
+      },
+      locations: {
+        type: 'array',
+        itemType: 'string',
+        required: false
+      },
+      business: {
+        type: 'string',
+        required: false
+      },
       employments: {
         type: 'array',
-        itemType: { type: 'object', required: false }
+        itemType: 'object',
+        required: false
       },
       educations: {
         type: 'array',
@@ -72,7 +89,11 @@ class UserCtl {
         required: false
       }
     })
-    const user = await User.findByIdAndUpdate(ctx.params.id, ctx.request.body, { new: true })
+    console.log(ctx.params.id, ctx.request.body, '999')
+    const user = await User.findByIdAndUpdate(ctx.params.id, ctx.request.body, {
+      new: true
+    })
+    debugger
     if (!user) {
       ctx.throw(404, '要更新用户不存在')
     }

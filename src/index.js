@@ -2,7 +2,6 @@ const Koa = require('koa')
 const path = require('path')
 const chalk = require('chalk')
 const bodyParser = require('koa-bodyparser')
-
 // const koaBody = require('koa-body')
 const error = require('koa-json-error')
 const parameter = require('koa-parameter')
@@ -34,7 +33,7 @@ db.once('open', function () {
 
 const app = new Koa()
 app.use(serve(path.join(__dirname, 'public')))
-const routing = require('./routes')
+
 app.use(bodyParser())
 // app.use(koaBody({
 //   multipart: true, // 支持文件上传
@@ -49,6 +48,7 @@ app.use(bodyParser())
 //     },
 //   }
 // }))
+const routing = require('./routes')
 app.use(parameter(app))
 app.use(error({
   // format: formatError,

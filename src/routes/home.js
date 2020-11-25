@@ -1,6 +1,7 @@
 const Router = require('koa-router')
 const multer = require('@koa/multer')
 const path = require('path')
+const { hashCode } = require('../utils/index')
 //配置
 let storage = multer.diskStorage({
   //文件保存路径
@@ -10,7 +11,11 @@ let storage = multer.diskStorage({
   //修改文件名称
   filename: function (req, file, cb) {
     let fileFormat = (file.originalname).split('.')
-    cb(null, Date.now() + '.' + fileFormat[fileFormat.length - 1])
+    let time = Date.now()
+    let hashStr = hashCode( time + fileFormat.slice(0,fileFormat.length - 1).join(''))
+    console.log(hashStr)
+    debugger
+    cb(null, 'upload_' + hashStr + '.' + fileFormat[fileFormat.length - 1])
   }
 })
 
