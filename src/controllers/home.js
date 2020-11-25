@@ -7,14 +7,14 @@ class HomeCtl {
     }
   }
 
-  upload(ctx) {
-    const file = ctx.request.files.file
-    const baseName = path.basename(file.path)
-    ctx.body = { url: `${ctx.origin}/uploads/${baseName}` }
-    // console.log(ctx.request.files)
-    // console.log(ctx.request.body)
-    // ctx.body = JSON.stringify(ctx.request.files)
+  async upload(ctx) {
+    const baseName = ctx.file.filename
+    ctx.body = {
+      url: `${ctx.origin}/uploads/${baseName}`
+    }
   }
+
+
 }
 
 module.exports = new HomeCtl()
