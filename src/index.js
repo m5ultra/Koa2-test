@@ -8,6 +8,7 @@ const parameter = require('koa-parameter')
 const serve = require('koa-static')
 // 通过mongoose 链接数据库
 const mongoose = require('mongoose')
+mongoose.set('useFindAndModify', true)
 const {
   uri
 } = require('./config')

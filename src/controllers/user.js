@@ -17,7 +17,10 @@ class UserCtl {
   }
 
   async findById(ctx) {
-    const user = await User.findById(ctx.params.id)
+    const { fields} = ctx.query
+    // tips: 注意用空格链接 mongoose语法: modal.select(+a +b)select(-c)
+    const selectFields = fields.split(';').filter(f => f).map(f => '+' + f).join(' ')
+    const user = await User.findById(ctx.params.id).select(selectFields).select('-password')
     if (!user) {
       ctx.throw(404, '查找用户不存在')
     }
@@ -89,11 +92,9 @@ class UserCtl {
         required: false
       }
     })
-    console.log(ctx.params.id, ctx.request.body, '999')
     const user = await User.findByIdAndUpdate(ctx.params.id, ctx.request.body, {
-      new: true
+      new: false
     })
-    debugger
     if (!user) {
       ctx.throw(404, '要更新用户不存在')
     }
