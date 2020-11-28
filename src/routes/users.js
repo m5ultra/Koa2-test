@@ -33,4 +33,7 @@ route.patch('/:id', auth, user.update)
 
 route.delete('/:id', auth, user.checkOwner, user.delete)
 route.post('/login', user.login)
+route.get('/:id/following', user.listFollowing)
+route.put('/follow/:id', auth, user.follow)
+route.delete('/unfollow/:id', auth, user.unfollow)
 module.exports = route

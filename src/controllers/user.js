@@ -17,7 +17,7 @@ class UserCtl {
   }
 
   async findById(ctx) {
-    const { fields} = ctx.query
+    const { fields = ';' } = ctx.query
     // tips: 注意用空格链接 mongoose语法: modal.select(+a +b)select(-c)
     const selectFields = fields.split(';').filter(f => f).map(f => '+' + f).join(' ')
     const user = await User.findById(ctx.params.id).select(selectFields).select('-password')
@@ -141,7 +141,36 @@ class UserCtl {
       success: true,
       token
     }
+  }
 
+  async listFollowing(ctx) {
+    const user = await User.findById(ctx.params.id).select('+following').populate('following')
+    if (!user) {
+      ctx.throw(404, '用户不存在')
+    }
+    ctx.body = {
+      following: user.following
+    }
+  }
+
+  async follow(ctx) {
+    const me = await User.findById(ctx.state.user._id).select('+following')
+    if (!me.following.map(v => v.toString()).includes(ctx.params.id)) {
+      me.following.push(ctx.params.id)
+      me.save()
+    }
+    // 成功了 但是没有内容返回
+    ctx.status = 204
+  }
+
+  async unfollow(ctx) {
+    const me = await User.findById(ctx.state.user._id).select('+following')
+    const index = me.following.map(v => v.toString()).indexOf(ctx.params.id)
+    if (index > -1) {
+      me.following.splice(index, 1)
+      me.save()
+    }
+    ctx.status = 204
   }
 }
 
