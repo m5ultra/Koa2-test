@@ -17,7 +17,9 @@ class UserCtl {
   }
 
   async findById(ctx) {
-    const { fields = ';' } = ctx.query
+    const {
+      fields = ';'
+    } = ctx.query
     // tips: 注意用空格链接 mongoose语法: modal.select(+a +b)select(-c)
     const selectFields = fields.split(';').filter(f => f).map(f => '+' + f).join(' ')
     const user = await User.findById(ctx.params.id).select(selectFields).select('-password')
@@ -163,6 +165,14 @@ class UserCtl {
     ctx.status = 204
   }
 
+  async checkUserExist(ctx, next) {
+    const user = await User.findById(ctx.params.id)
+    if (!user) {
+      ctx.throw(404, '用户不存在。')
+    }
+    await next()
+  }
+
   async unfollow(ctx) {
     const me = await User.findById(ctx.state.user._id).select('+following')
     const index = me.following.map(v => v.toString()).indexOf(ctx.params.id)
@@ -171,6 +181,12 @@ class UserCtl {
       me.save()
     }
     ctx.status = 204
+  }
+
+  async listFollowers(ctx) {
+    ctx.body = await User.find({
+      following: ctx.params.id
+    })
   }
 }
 
