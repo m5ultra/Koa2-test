@@ -6,7 +6,10 @@ const {
 
 class UserCtl {
   async find(ctx) {
+    const { pageSize = 10, page = 1 } = ctx.query
     ctx.body = await User.find()
+    .limit(parseInt(Math.abs(pageSize), 10))
+    .skip((parseInt(Math.abs(page), 10) - 1) * Math.abs(pageSize))
   }
 
   async checkOwner(ctx, next) {

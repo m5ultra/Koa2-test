@@ -14,7 +14,6 @@ let storage = multer.diskStorage({
     let time = Date.now()
     let hashStr = hashCode( time + fileFormat.slice(0,fileFormat.length - 1).join(''))
     console.log(hashStr)
-    debugger
     cb(null, 'upload_' + hashStr + '.' + fileFormat[fileFormat.length - 1])
   }
 })
