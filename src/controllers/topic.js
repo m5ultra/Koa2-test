@@ -3,7 +3,7 @@ const Topic = require('../models/topic')
 class TopicCtl {
   async find(ctx) {
     const { pageSize = 10, page = 1 } = ctx.query
-    ctx.body = await Topic.find()
+    ctx.body = await Topic.find({name: new RegExp(ctx.query.q)})
     .limit(parseInt(Math.abs(pageSize), 10))
     .skip((parseInt(Math.abs(page), 10) - 1) * Math.abs(pageSize))
   }

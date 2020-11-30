@@ -8,8 +8,8 @@ class UserCtl {
   async find(ctx) {
     const { pageSize = 10, page = 1 } = ctx.query
     ctx.body = await User.find()
-    .limit(parseInt(Math.abs(pageSize), 10))
-    .skip((parseInt(Math.abs(page), 10) - 1) * Math.abs(pageSize))
+      .limit(parseInt(Math.abs(pageSize), 10))
+      .skip((parseInt(Math.abs(page), 10) - 1) * Math.abs(pageSize))
   }
 
   async checkOwner(ctx, next) {
@@ -25,7 +25,19 @@ class UserCtl {
     } = ctx.query
     // tips: 注意用空格链接 mongoose语法: modal.select(+a +b)select(-c)
     const selectFields = fields.split(';').filter(f => f).map(f => '+' + f).join(' ')
-    const user = await User.findById(ctx.params.id).select(selectFields).select('-password')
+    const populateStr = fields.split(';').filter(f => f).map(f => {
+      if (f === 'employments') {
+        return `employments.company employments.job`
+      }
+      if (f === 'educations') {
+        return `educations.major educations.school`
+      }
+      return f
+    }).join(' ')
+    const user = await User.findById(ctx.params.id)
+      .select(selectFields).select('-password')
+      .populate(populateStr)
+
     if (!user) {
       ctx.throw(404, '查找用户不存在')
     }

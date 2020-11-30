@@ -5,47 +5,39 @@ const {
 } = mongoose
 
 const userSchema = new Schema({
-  __v: {
-    type: String,
-    select: false
-  },
+  __v: { type: String, select: false },
   name: {
-    type: String,
-    required: true
+    type: String, required: true
   },
   password: {
-    type: Number,
-    required: true,
-    select: false
+    type: Number, required: true, select: false
   },
   avatar_url: {
     type: String
   },
   gender: {
-    type: String,
-    enum: ['male', 'female'],
-    default: 'male',
+    type: String, enum: ['male', 'female'], default: 'male',
   },
   headline: {
     type: String
   },
   locations: {
     type: [{
-      type: String
-    }],
-    select: false
+      type: Schema.Types.ObjectId, ref: 'Topic'
+    }], select: false
   },
   business: {
-    type: String,
-    select: false
+    type: Schema.Types.ObjectId, select: false, ref: 'Topic'
   },
   employments: {
     type: [{
       company: {
-        type: String
+        type: Schema.Types.ObjectId,
+        ref: 'Topic'
       },
       job: {
-        type: String
+        type: Schema.Types.ObjectId,
+        ref: 'Topic'
       }
     }],
     select: false
@@ -53,10 +45,12 @@ const userSchema = new Schema({
   educations: {
     type: [{
       school: {
-        type: String
+        type: Schema.Types.ObjectId,
+        ref: 'Topic'
       },
       major: {
-        type: String
+        type: Schema.Types.ObjectId,
+        ref: 'Topic'
       },
       diploma: {
         type: Number,
