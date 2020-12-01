@@ -1,9 +1,17 @@
 const Topic = require('../models/topic')
 
 class TopicCtl {
+  async checkTopicIsExist(ctx, next) {
+    const topic = await Topic.findById(ctx.params.id)
+    if (!topic) {
+      ctx.throw(404, '话题不存在')
+    }
+    await next()
+  }
+
   async find(ctx) {
     const { pageSize = 10, page = 1 } = ctx.query
-    ctx.body = await Topic.find({name: new RegExp(ctx.query.q)})
+    ctx.body = await Topic.find({ name: new RegExp(ctx.query.q) })
     .limit(parseInt(Math.abs(pageSize), 10))
     .skip((parseInt(Math.abs(page), 10) - 1) * Math.abs(pageSize))
   }

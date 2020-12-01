@@ -8,8 +8,8 @@ class UserCtl {
   async find(ctx) {
     const { pageSize = 10, page = 1 } = ctx.query
     ctx.body = await User.find()
-      .limit(parseInt(Math.abs(pageSize), 10))
-      .skip((parseInt(Math.abs(page), 10) - 1) * Math.abs(pageSize))
+    .limit(parseInt(Math.abs(pageSize), 10))
+    .skip((parseInt(Math.abs(page), 10) - 1) * Math.abs(pageSize))
   }
 
   async checkOwner(ctx, next) {
@@ -35,8 +35,8 @@ class UserCtl {
       return f
     }).join(' ')
     const user = await User.findById(ctx.params.id)
-      .select(selectFields).select('-password')
-      .populate(populateStr)
+    .select(selectFields).select('-password')
+    .populate(populateStr)
 
     if (!user) {
       ctx.throw(404, '查找用户不存在')
@@ -183,7 +183,7 @@ class UserCtl {
   async checkUserExist(ctx, next) {
     const user = await User.findById(ctx.params.id)
     if (!user) {
-      ctx.throw(404, '用户不存在。')
+      ctx.throw(404, '用户不存在')
     }
     await next()
   }
@@ -201,6 +201,42 @@ class UserCtl {
   async listFollowers(ctx) {
     ctx.body = await User.find({
       following: ctx.params.id
+    })
+  }
+
+  async unfollowTopic(ctx) {
+    const me = await User.findById(ctx.state.user._id).select('+followingTopics')
+    const index = me.followingTopics.map(v => v.toString()).indexOf(ctx.params.id)
+    if (index > -1) {
+      me.followingTopics.splice(index, 1)
+      me.save()
+    }
+    ctx.status = 204
+  }
+
+  async followTopic(ctx) {
+    const me = await User.findById(ctx.state.user._id).select('+followingTopics')
+    if (!me.followingTopics.map(v => v.toString()).includes(ctx.params.id)) {
+      me.followingTopics.push(ctx.params.id)
+      me.save()
+    }
+    // 成功了 但是没有内容返回
+    ctx.status = 204
+  }
+
+  // 获取用户关注的话题列表
+  async listFollowingTopic(ctx) {
+    const list = await User.findById(ctx.params.id).select('+followingTopics').populate('followingTopics')
+    if (!list) {
+      ctx.throw(404, '话题不存在')
+    }
+    ctx.body = {
+      list: list.followingTopics
+    }
+  }
+  async listFollowersTopic(ctx) {
+    ctx.body = await User.find({
+      followingTopics: ctx.params.id
     })
   }
 }
