@@ -225,7 +225,7 @@ class UserCtl {
   }
 
   // 获取用户关注的话题列表
-  async listFollowingTopic(ctx) {
+  async listTopicFollowing(ctx) {
     const list = await User.findById(ctx.params.id).select('+followingTopics').populate('followingTopics')
     if (!list) {
       ctx.throw(404, '话题不存在')
@@ -234,11 +234,7 @@ class UserCtl {
       list: list.followingTopics
     }
   }
-  async listFollowersTopic(ctx) {
-    ctx.body = await User.find({
-      followingTopics: ctx.params.id
-    })
-  }
+
 }
 
 module.exports = new UserCtl()

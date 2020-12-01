@@ -17,5 +17,6 @@ route.get('/', topic.find)
 route.get('/:id', topic.findById)
 
 route.patch('/:id', auth, topic.update)
-
+// 获取话题粉丝列表
+route.get('/:id/topicFollower', auth, topic.listTopicFollowers)
 module.exports = route
