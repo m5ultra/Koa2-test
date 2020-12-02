@@ -110,7 +110,7 @@ class UserCtl {
       }
     })
     const user = await User.findByIdAndUpdate(ctx.params.id, ctx.request.body, {
-      new: false
+      new: true
     })
     if (!user) {
       ctx.throw(404, '要更新用户不存在')
@@ -234,7 +234,6 @@ class UserCtl {
       list: list.followingTopics
     }
   }
-
 }
 
 module.exports = new UserCtl()
