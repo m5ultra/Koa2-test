@@ -1,4 +1,5 @@
 const User = require('../models/user')
+const Question = require('../models/question')
 const jsonwebtoken = require('jsonwebtoken')
 const {
   code
@@ -232,6 +233,14 @@ class UserCtl {
     }
     ctx.body = {
       list: list.followingTopics
+    }
+  }
+
+  // 用户问题列表
+  async listQuestion(ctx) {
+    const questions = await Question.find({questioner: ctx.params.id})
+    ctx.body = {
+      questions
     }
   }
 }

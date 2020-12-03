@@ -48,4 +48,5 @@ route.delete('/unfollowTopic/:id', auth, topic.checkTopicIsExist, user.unfollowT
 route.get('/:id/follower', auth, user.listFollowers)
 // 关注话题的列表
 route.get('/:id/topicFollowing', user.listTopicFollowing)
+route.get('/:id/questions', auth, user.listQuestion)
 module.exports = route

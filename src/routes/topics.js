@@ -10,7 +10,7 @@ const {
 const auth = jwt({
   secret: code
 })
-let post = route.post('/', auth, topic.create)
+route.post('/', auth, topic.create)
 
 route.get('/', topic.find)
 
