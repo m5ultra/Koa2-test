@@ -1,5 +1,7 @@
 const Topic = require('../models/topic')
 const User = require('../models/user')
+const Question = require('../models/question')
+
 class TopicCtl {
   async checkTopicIsExist(ctx, next) {
     const topic = await Topic.findById(ctx.params.id)
@@ -53,6 +55,13 @@ class TopicCtl {
     ctx.body = await User.find({
       followingTopics: ctx.params.id
     })
+  }
+
+  async listQuestions(ctx) {
+    const questions = await Question.find({topics: ctx.params.id})
+    ctx.body = {
+      questions
+    }
   }
 }
 

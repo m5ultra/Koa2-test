@@ -11,6 +11,7 @@ class UserCtl {
     ctx.body = await User.find()
     .limit(parseInt(Math.abs(pageSize), 10))
     .skip((parseInt(Math.abs(page), 10) - 1) * Math.abs(pageSize))
+    console.log(ctx.body, '9090')
   }
 
   async checkOwner(ctx, next) {

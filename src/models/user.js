@@ -10,7 +10,7 @@ const userSchema = new Schema({
     type: String, required: true
   },
   password: {
-    type: Number, required: true, select: false
+    type: Number, required: true, select: true
   },
   avatar_url: {
     type: String
@@ -24,10 +24,10 @@ const userSchema = new Schema({
   locations: {
     type: [{
       type: Schema.Types.ObjectId, ref: 'Topic'
-    }], select: false
+    }], select: true
   },
   business: {
-    type: Schema.Types.ObjectId, select: false, ref: 'Topic'
+    type: Schema.Types.ObjectId, select: true, ref: 'Topic'
   },
   employments: {
     type: [{
